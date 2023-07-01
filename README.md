@@ -3,10 +3,17 @@ Tableau Server REST API Doc: https://help.tableau.com/current/api/rest_api/en-us
 
 Here is some of the usage that I tried out and put to use:
 - Download Workbooks for Git Revision
-- Create Groups, Projects and set Permission for each group for the Project
+- Create Groups, Projects and Set Permission for each group for the Project
 
 ### Before Running Files
-Fill out `var.py` with your API token and Tableau Server information. 
+Create python virtual environment and `pip install` the following modules:
+- TableauServerConnection
+- requests
+- tableau_api_lib
+- python-dotenv
+
+Fill out `env.txt` with your API token and Tableau Server information and rename it to `.env`.
+
 Here's where you can create a Personal Access Token: https://help.tableau.com/current/online/en-us/security_personal_access_tokens.htm  
 
 ### Download Workbooks for Git Revision
@@ -19,5 +26,5 @@ Use/Run the `download_workbook.py` and follow the prompt. It's interactive!
 - Once the selection is complete, the workbooks will be downloaded and place in a directory which gets created with the same name of the workbook (if one doesn't already exist).
 - The files are ready to be added, committed and push to the repo. 
 
-### Create Groups, Projects and set Permission for each group for the Project
+### Create Groups, Projects and Set Permission for each group for the Project
 This is particularly useful when you have different Tableau Sites or Servers that you need to configure the same group permission with the projects. Save you a lot of mouse-clicking.

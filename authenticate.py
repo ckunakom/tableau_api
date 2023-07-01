@@ -18,7 +18,7 @@ config = {
 conn = TableauServerConnection(config, env="tableau_server")
 
 def tableau_sign_in():
-    print(f'Sign in Response Code: {conn.sign_in().status_code}')
+    print(f'Sign in HTTP status: {conn.sign_in().status_code}')
 
 def tableau_sign_out():
-    print(f'Sign Out Response Code {conn.sign_out().status_code}')
+    print(f'Sign Out HTTP status {conn.sign_out().status_code}')

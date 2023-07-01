@@ -10,9 +10,9 @@ def group_json(data):
     '''Selectively grabbing name and id from raw json. 
     This is being used in get_group()'''
     name = data['name']
-    id = data['id']
-
-    return {'name': name, 'id': id}
+    group_id = data['id']
+    site_role = data.get('import', {}).get('siteRole')
+    return {'name': name, 'id': group_id, 'site_role': site_role}
 
 
 def get_group():
@@ -26,4 +26,4 @@ def get_group():
     return group_list
 
 # Uncomment to try it out!
-# get_group()
+get_group()

@@ -1,7 +1,6 @@
-from tableau_api_lib import TableauServerConnection
+# from tableau_api_lib import TableauServerConnection
 from tableau_api_lib.utils import querying, flatten_dict_column
-from auth_sign_in import *
-import os
+from authenticate import *
 
 # Sign in with auth_sign_in
 tableau_sign_in()
@@ -136,5 +135,4 @@ for wkbk in selected_wkbk_list:
 print(f'Done!')
 
 # Sign out of the server
-conn.sign_out()
-print('----Signed out----')
+tableau_sign_out()

@@ -1,5 +1,0 @@
-token_name = ''
-token_secret = ''
-site_name = ''
-site_url = ''
-server_string = ''

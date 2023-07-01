@@ -2,7 +2,7 @@ import tableauserverclient as TSC
 from tableau_api_lib import TableauServerConnection
 from config import *
 
-# Sign in and auth with token
+'''Sign in/out and authenthicate with personal access token'''
 
 config = {
     'tableau_server': {
@@ -18,7 +18,9 @@ config = {
 conn = TableauServerConnection(config, env="tableau_server")
 
 def tableau_sign_in():
+    '''Sign in into Tableau'''
     print(f'Sign in HTTP status: {conn.sign_in().status_code}')
 
 def tableau_sign_out():
+    '''Sign out of Tableau'''
     print(f'Sign Out HTTP status {conn.sign_out().status_code}')

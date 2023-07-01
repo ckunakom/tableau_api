@@ -1,4 +1,4 @@
-# Dependency
+# Dependencies
 from authenticate import *
 import json
 
@@ -26,4 +26,4 @@ def get_group():
     return group_list
 
 # Uncomment to try it out!
-get_group()
+# get_group()

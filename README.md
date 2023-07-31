@@ -35,6 +35,10 @@ This is particularly useful when you have different Tableau sites and/or servers
 
 - Run `create_group.py` to create groups. Define the name and the minimum site role the group should have within `group_obj` variable. This will call `query_groups.py` and display the existing groups before new group is being created.
 
+- Modify the `create_projects.py` in `TODO` to define the name of the project/sub-project to be created as well as the list of groups to be configured with the appropriate capability. 
+    - Note 1: When projects are created, 'All User' gets automatically configured with a default permission for all the capabilities (ex. Read/Write for Workbooks, Flow, Metrics, etc.). There are functions created in `all_user_none_permission.py` that will get called when running `create_projects.py` to address this and 'All User' will get 'None' template permission as a default.
+    - Note 2: When creating sub-projects, the user that invokes the API will automatically get configured with Project Leader capability for all the sub-projects. User will be asked to input their username in order to remove such capability from those sub-projects.
+
 ## Miscellaneous
 ### Query excisting groups
 Run the `query_groups.py` to get json data on the existing groups.

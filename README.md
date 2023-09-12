@@ -3,7 +3,7 @@ Tableau Server REST API Doc: https://help.tableau.com/current/api/rest_api/en-us
 
 Here is some of the usage that I put to use:
 - Download Workbooks for Git Revision
-- Create Groups, Projects and Set Permission for each group for the Project
+- Create Groups, Projects and Set Permission for each group for the Project + Create Sub-projects with Inherited Permission from Projects
 
 Here is what I created as they get used in the above cases on the side:
 - Query excisting groups
@@ -30,7 +30,7 @@ Run the `download_workbook.py` and follow the prompt. It's interactive!
 
 Quick shout-out to this youtube video as it saves me the trouble of some readings🤫: https://youtu.be/swasTFYM_Gs
 
-## Create Groups, Projects and Set Permission for each group for the Project
+## Create Groups, Projects and Set Permission for each group for the Project + Create Sub-projects with Inherited Permission from Projects
 This is particularly useful when you have different Tableau sites and/or servers that you need to configure the same group permission with the same project name. Save you a lot of mouse-clicking.
 
 - Run `create_group.py` to create groups. Define the name and the minimum site role the group should have within `group_obj` variable. This will call `query_groups.py` and display the existing groups before new group is being created.

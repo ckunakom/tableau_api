@@ -14,10 +14,11 @@ def get_all_users_id():
     group_list = get_group()
     all_users_id = next((g['id'] for g in group_list if g['name'] == 'All Users'), None)
     print(f'Id for All Users Group: {all_users_id}')
-    return all_users_id
+    # It's a waste to not be able to use group_list, so will add to return:
+    return group_list, all_users_id
 
 # Default Capability for Project, Flow, Data Roles, Lens and Metrics
-    '''perm_capability = ['Write', 'Read']'''
+'''perm_capability = ['Write', 'Read']'''
 
 def project_remove_group_perm(project_id, group_id, perm_capability):
     '''Remove previously configured Read & Write permission to a group for a project.'''

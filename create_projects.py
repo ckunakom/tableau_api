@@ -13,7 +13,7 @@ from all_user_none_permission import *
 projects = ['Test']
 
 # Get the group id for All Users
-all_user = get_all_users_id()
+all_user = get_all_users_id()[1]
 
 # List of existing projects in the site
 project_df = querying.get_projects_dataframe(conn)
@@ -46,8 +46,6 @@ for p in projects:
     workbook_remove_group_default_perm(project_id, all_user)
     datasource_remove_group_default_perm(project_id, all_user)
 
-# Should theses be a function or another file? 
-
     #### Creating child projects with carried over permission configuration of all the groups ####
     #### ------------------------------------------------------------------------------------ ####
 
@@ -63,11 +61,19 @@ for p in projects:
     explorer_group = ['Test2', 'Test3']
     deny_group = ['Test0']
 
+    # Get all the groups existing in the site
+    all_groups = get_all_users_id()[0]
+
     # TODO: In progress
-    # # Add permission for the above
-    # for x in perm_add:
-    #     response = conn.add_project_permissions(project_id=project_id, group_capability_dict=x['permission'], group_id=x['id'])
-    #     print(response.status_code)
+    # Add permission for the above
+    for a in all_groups:
+        if a['name'] in creator_group:
+            response = conn.add_project_permissions(project_id=project_id, group_capability_dict=perm_allow, group_id=a['id'])
+            print(f"Project permission configured for {a['name']} group HTTP Status: {response.status_code}")
+        # add elif for the other two groups
+        
+        else:
+            print(f"No project permission is configured for {a['name']} group.")
     
     #2. Create sub-project with inherited configured permission
     ''' This will automatically add the user who runs the api code as the 

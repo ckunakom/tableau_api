@@ -1,16 +1,15 @@
 # Dependencies
 import time
 from tableau_api_lib.utils import querying
-from all_user_none_permission import *
+from remove_permission_util import *
+# Correspond the variables used in this file with `variables.py`, indicated with 'Section'
+from variables import *
 
 ###############################################################
 '''This file is for creating projects when a new site has been
     added to the server and the project structure needs to mimic
     the existing structure as the other site.'''
 ###############################################################
-
-# TODO: List out name of projects to be created create
-projects = ['Test']
 
 # Get the group id for All Users
 all_user = get_all_users_id()[1]
@@ -19,6 +18,7 @@ all_user = get_all_users_id()[1]
 project_df = querying.get_projects_dataframe(conn)
 exist_project = project_df['name'][project_df['parentProjectId'].isnull()].tolist()
 
+# Variable Section A
 for p in projects:
     # Create the project if doesn't exist as Parent project
     if p not in exist_project:
@@ -49,46 +49,106 @@ for p in projects:
     #### Creating child projects with carried over permission configuration of all the groups ####
     #### ------------------------------------------------------------------------------------ ####
 
-    #1. Add all the groups and config perm -- note to self: this needs to be part of create_projects
-    # Objects with different capability permission to configure
-    # TODO: Update as needed
-    perm_allow = {'Read': 'Allow', 'Write': 'Allow'}
-    perm_deny = {'Read': 'Deny', 'Write': 'Deny'}
-    perm_explore = {'Read': 'Allow', 'Write': 'Deny'}
-
-    # Groups to be configured with permission
-    creator_group = ['Test1']
-    explorer_group = ['Test2', 'Test3']
-    deny_group = ['Test0']
-
+    #1. Add all the groups and config perm 
     # Get all the groups existing in the site
     all_groups = get_all_users_id()[0]
 
-    # TODO: In progress
-    # Add permission for the above
+    # Add permission for the groups as defined earlier
+    # TODO: Add permission method for other object as needed
     for a in all_groups:
-        if a['name'] in creator_group:
-            response = conn.add_project_permissions(project_id=project_id, group_capability_dict=perm_allow, group_id=a['id'])
-            print(f"Project permission configured for {a['name']} group HTTP Status: {response.status_code}")
-        # add elif for the other two groups
+        print(f"HTTP Status for configuring permission of {a['name']} Group:")
         
+        # Variable Section B
+        if a['name'] in admin_group:
+            '''Admin already has a default permission for all objests, so no need to configure other objects.'''
+            project_response = conn.add_project_permissions(
+                project_id=project_id, 
+                group_capability_dict=perm_admin, 
+                group_id=a['id']
+            )
+
+        elif a['name'] in creator_group:
+            project_response = conn.add_project_permissions(
+                project_id=project_id, 
+                group_capability_dict=perm_allow, 
+                group_id=a['id'])
+
+            data_response = conn.add_default_permissions(
+                project_id=project_id,
+                project_permissions_object='datasource',
+                group_capability_dict=ds_perm_allow,
+                group_id=a['id'],
+            )
+            wkbk_response = conn.add_default_permissions(
+                project_id=project_id,
+                project_permissions_object='workbook',
+                group_capability_dict=wkbk_perm_allow,
+                group_id=a['id'],
+            )
+
+        elif a['name'] in explorer_group:
+            project_response = conn.add_project_permissions(
+                project_id=project_id, 
+                group_capability_dict=perm_explore, 
+                group_id=a['id'])
+
+            data_response = conn.add_default_permissions(
+                project_id=project_id,
+                project_permissions_object='datasource',
+                group_capability_dict=ds_perm_explore,
+                group_id=a['id'],
+            )
+                                
+            wkbk_response = conn.add_default_permissions(
+                project_id=project_id,
+                project_permissions_object='workbook',
+                group_capability_dict=wkbk_perm_explore,
+                group_id=a['id'],
+            )
+
+        elif a['name'] in deny_group:
+            project_response = conn.add_project_permissions(
+                project_id=project_id, 
+                group_capability_dict=perm_deny, 
+                group_id=a['id'])
+
+            data_response = conn.add_default_permissions(
+                    project_id=project_id,
+                    project_permissions_object='datasource',
+                    group_capability_dict=ds_perm_deny,
+                    group_id=a['id'],
+            )
+                                
+            wkbk_response = conn.add_default_permissions(
+                    project_id=project_id,
+                    project_permissions_object='workbook',
+                    group_capability_dict=wkbk_perm_deny,
+                    group_id=a['id'],
+            )
+
         else:
-            print(f"No project permission is configured for {a['name']} group.")
-    
+            print(f'No permission has been configured.')
+        
+        try:
+            print(f'Project permission: {project_response.status_code}')
+            print(f'Data Source permission: {data_response.status_code}')
+            print(f'Workbook permission: {wkbk_response.status_code}')
+
+        except NameError:
+            continue
+
     #2. Create sub-project with inherited configured permission
     ''' This will automatically add the user who runs the api code as the 
         Project Leader for these sub-projects. To remove, see #3 or comment out.'''
-    # TODO: Create list of sub-projects
-    sub_projects = ['Sub-Test1', 'Sub-Test2']
 
+    # Variable Section C
     for s in sub_projects:
-        response = conn.create_project(project_name=f'{p} {s}', parent_project_id=project_id)
+        response = conn.create_project(project_name=s, parent_project_id=project_id)
         print(f'Sub-project {s} Created in {p} HTTP Status: {response.status_code}')
 
     #3. Removed InheritedProjectLeader from the User running the code
-    # TODO: Input your Tableau Server Username
-    username_input = input('Enter your username: ')
     user_df = querying.get_users_dataframe(conn)
+    # Variable Section D
     target_user_id = user_df[user_df['name'] == username_input]['id'].values[0]
     print(f'User ID to be stripped off InheritedProjectLeader capability: {target_user_id}')
 

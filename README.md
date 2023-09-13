@@ -1,11 +1,11 @@
 # Create more functionality in Tableau Server with Rest API
 Tableau Server REST API Doc: https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api_ref.htm
 
-Here is some of the usage that I put to use:
+Here are some of the usage that I put to use:
 - Download Workbooks for Git Revision
 - Create Groups, Projects and Set Permission for each group for the Project + Create Sub-projects with Inherited Permission from Projects
 
-Here is what I created as they get used in the above cases on the side:
+These are what I created as they get used in the above cases on the side:
 - Query excisting groups
 - Delete a group or multiple groups 
 
@@ -33,10 +33,12 @@ Quick shout-out to this youtube video as it saves me the trouble of some reading
 ## Create Groups, Projects and Set Permission for each group for the Project + Create Sub-projects with Inherited Permission from Projects
 This is particularly useful when you have different Tableau sites and/or servers that you need to configure the same group permission with the same project name. Save you a lot of mouse-clicking.
 
-- Run `create_group.py` to create groups. Define the name and the minimum site role the group should have within `group_obj` variable. This will call `query_groups.py` and display the existing groups before new group is being created.
+- Update `variables.py` according to your needs (Project name, group name, group capability, etc). The section letter is specified to help locate the block of code that uses those variables in the `create_projects.py`.
+
+- Run `create_group.py` to create groups. Define the name and the minimum site role the group should have within `group_obj` variable in `variables.py`. This will call `query_groups.py` and display the existing groups before new group is being created.
 
 - Modify the `create_projects.py` in `TODO` to define the name of the project/sub-project to be created as well as the list of groups to be configured with the appropriate capability. 
-    - Note 1: When projects are created, 'All User' gets automatically configured with a default permission for all the capabilities (ex. Read/Write for Workbooks, Flow, Metrics, etc.). There are functions created in `all_user_none_permission.py` that will get called when running `create_projects.py` to address this and 'All User' will get 'None' template permission as a default.
+    - Note 1: When projects are created, 'All User' gets automatically configured with a default permission for all the capabilities (ex. Read/Write for Workbooks, Flow, Metrics, etc.). There are functions created in `remove_permission_util.py` that will get called when running `create_projects.py` to address this and 'All User' will get 'None' template permission as a default.
     - Note 2: When creating sub-projects, the user that invokes the API will automatically get configured with Project Leader capability for all the sub-projects. User will be asked to input their username in order to remove such capability from those sub-projects.
 
 ## Miscellaneous

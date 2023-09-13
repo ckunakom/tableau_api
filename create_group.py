@@ -1,29 +1,19 @@
 # Dependencies
 from query_groups import *
-
+from variables import *
 ###############################################################
 '''This file is for creating groups when a new site has been 
     added to the server.'''
 ###############################################################
-
-# TODO: Create Groups  
-'''Manually define what the group name and the minimum 
-    site role should be.'''
-
-group_obj = [
-    {'group_name': 'Test0', 'min_site_role': None},
-    {'group_name': 'Test1', 'min_site_role': 'Creator'},
-    {'group_name': 'Test2', 'min_site_role': 'Explorer'},
-    {'group_name': 'Test3', 'min_site_role': 'Viewer'}
-]
 
 # Query existing group
 existing_group = get_group()
 
 # Create group
 group_name_list = [e['name'] for e in existing_group]
-
 print('Creating groups...')
+
+# See `variables.py` for the defined `group_obj`
 for g in group_obj:
     if g['group_name'] not in group_name_list:
         response = conn.create_group(new_group_name=g['group_name'], minimum_site_role=g['min_site_role'])
